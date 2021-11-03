@@ -3,7 +3,9 @@ package dev.poom.utils
 data class Op(val instruction: Instruction, val values: List<*>)
 
 inline fun <reified T : Enum<T>> intoEnum(name: String): T? {
-    return enumValues<T>().find { it.name.lowercase() == name }
+    return try {
+        enumValueOf<T>(name.uppercase())
+    } catch (e: IllegalArgumentException) { null }
 }
 
 object InstructionParser {
