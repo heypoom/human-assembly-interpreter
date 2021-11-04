@@ -22,8 +22,8 @@ class Interpreter(val state: MachineState = MachineState()) {
     fun xor(reg: Register, value: Int) = mov(reg, value(reg) xor value)
     fun not(reg: Register) = mov(reg, value(reg).inv())
 
-    fun shl(reg: Register, value: Int) = mov(reg, value(reg) shl value)
-    fun shr(reg: Register, value: Int) = mov(reg, value(reg) shr value)
+    fun shl(reg: Register, value: Int = 1) = mov(reg, value(reg) shl value)
+    fun shr(reg: Register, value: Int = 1) = mov(reg, value(reg) shr value)
 
     fun value(register: Register): Int = state.registers[register] ?: 0
 }

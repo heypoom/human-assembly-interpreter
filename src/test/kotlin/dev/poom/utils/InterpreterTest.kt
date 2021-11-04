@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 
 internal class InterpreterTest {
     @Test
-    fun valueOf() {
+    fun value() {
         val m = Interpreter()
         m.state.registers[Register.EAX] = 50
 
@@ -60,5 +60,29 @@ internal class InterpreterTest {
         m.dec(Register.ECX)
 
         assertEquals(9, m.value(Register.ECX))
+    }
+
+    @Test
+    fun shl() {
+        val m = Interpreter()
+        m.mov(Register.EAX, 0b11010100)
+
+        m.shl(Register.EAX)
+        assertEquals(0b110101000, m.value(Register.EAX))
+
+        m.shl(Register.EAX, 3)
+        assertEquals(0b110101000000, m.value(Register.EAX))
+    }
+
+    @Test
+    fun shr() {
+        val m = Interpreter()
+        m.mov(Register.EAX, 0b11010100)
+
+        m.shr(Register.EAX)
+        assertEquals(0b01101010, m.value(Register.EAX))
+
+        m.shr(Register.EAX, 3)
+        assertEquals(0b1101, m.value(Register.EAX))
     }
 }
