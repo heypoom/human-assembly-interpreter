@@ -139,8 +139,7 @@ internal class InterpreterTest {
         m.cmp(10, 10)
 
         // ZF = 1, CF = 0
-        val v = FlagView(m.value(Register.FLAGS))
-        assertEquals(true to false, v.get(Flag.ZERO) to v.get(Flag.CARRY))
+        assertEquals(true to false, m.flags[Flag.ZERO] to m.flags[Flag.CARRY])
     }
 
     @Test
@@ -150,8 +149,7 @@ internal class InterpreterTest {
         m.cmp(10, 50)
 
         // ZF = 0, CF = 1
-        val v = FlagView(m.value(Register.FLAGS))
-        assertEquals(false to true, v.get(Flag.ZERO) to v.get(Flag.CARRY))
+        assertEquals(false to true, m.flags[Flag.ZERO] to m.flags[Flag.CARRY])
     }
 
     @Test
@@ -161,7 +159,6 @@ internal class InterpreterTest {
         m.cmp(100, 20)
 
         // ZF = 0, CF = 0
-        val v = FlagView(m.value(Register.FLAGS))
-        assertEquals(false to false, v.get(Flag.ZERO) to v.get(Flag.CARRY))
+        assertEquals(false to false, m.flags[Flag.ZERO] to m.flags[Flag.CARRY])
     }
 }

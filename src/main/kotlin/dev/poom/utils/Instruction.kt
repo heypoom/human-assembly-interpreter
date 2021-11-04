@@ -57,7 +57,32 @@ enum class Instruction {
     /** Load effective address */
     LEA,
 
+    /** Jump to an address */
     JMP,
+
+    /** Jump if value is above */
+    JA,
+
+    /** Jump if value is not above */
+    JNA,
+
+    /** Jump if value is not above or equal */
+    JAE,
+
+    /** Jump if value is below */
+    JB,
+
+    /** Jump if value is not below */
+    JNB,
+
+    /** Jump if value is not below or equal */
+    JBE,
+
+    /** Jump if carry flag is set */
+    JC,
+
+    /** Jump if carry flag is not set */
+    JNC,
 
     /** Jump if value is greater than n (x > n) */
     JG,

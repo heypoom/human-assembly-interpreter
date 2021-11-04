@@ -1,7 +1,7 @@
 package dev.poom.utils
 
-import java.util.*
-import kotlin.streams.toList
+import dev.poom.utils.Flag.*
+import dev.poom.utils.Register.*
 
 data class MachineState(
     val registers: MutableMap<Register, Int> = mutableMapOf(),
@@ -37,9 +37,11 @@ class Interpreter(val state: MachineState = MachineState()) {
     fun shl(reg: Register, value: Int = 1) = mov(reg, value(reg) shl value)
     fun shr(reg: Register, value: Int = 1) = mov(reg, value(reg) shr value)
 
-    fun jmp(line: Int) = mov(Register.EIP, line)
+    fun jmp(line: Int) = mov(EIP, line)
 
     fun cmp(reg: Register, value: Int) = cmp(value(reg), value)
+
+    val flags get() = FlagView(value(FLAGS))
 
     fun cmp(dst: Int, src: Int) {
         val (zero, carry) = when {
@@ -48,35 +50,50 @@ class Interpreter(val state: MachineState = MachineState()) {
             else -> false to false
         }
 
-        val status = FlagView(value(Register.FLAGS))
-            .set(Flag.ZERO, zero)
-            .set(Flag.CARRY, carry)
+        val status = flags
+            .set(ZERO, zero)
+            .set(CARRY, carry)
             .bits
 
-        mov(Register.FLAGS, status)
+        mov(FLAGS, status)
     }
 
     // TODO: Set zero bits
     fun test(value: Int) {
-        mov(Register.FLAGS, 0b01010101)
+        mov(FLAGS, 0b01010101)
     }
 
-    fun jne(to: Int) {
-
+    private fun jumpIf(dst: Int, condition: Boolean) {
+        if (condition) jmp(dst)
     }
+
+    fun ja(dst: Int) = jumpIf(dst, !flags[CARRY] && !flags[ZERO])
+    fun jae(dst: Int) = jumpIf(dst, !flags[CARRY])
+
+    fun jb(dst: Int) = jumpIf(dst, flags[CARRY])
+    fun jbe(dst: Int) = jumpIf(dst, flags[CARRY] || flags[ZERO])
+
+    fun je(dst: Int) = jumpIf(dst, flags[ZERO])
+    fun jne(dst: Int) = jumpIf(dst, !flags[ZERO])
+
+    fun jl(dst: Int) = jumpIf(dst, flags[SIGN] != flags[OVERFLOW])
+    fun jle(dst: Int) = jumpIf(dst, flags[ZERO] || (flags[SIGN] != flags[OVERFLOW]))
+
+    fun jg(dst: Int) = jumpIf(dst, flags[ZERO] && (flags[SIGN] == flags[OVERFLOW]))
+    fun jge(dst: Int) = jumpIf(dst, flags[SIGN] == flags[OVERFLOW])
 
     fun push(value: Int) {
-        add(Register.ESP, 4)
+        add(ESP, 4)
 
-        val sp = value(Register.ESP)
+        val sp = value(ESP)
         state.stack[sp] = value
     }
 
     fun pop(dst: Register) {
-        val sp = value(Register.ESP)
+        val sp = value(ESP)
         val value = state.stack[sp] ?: 0
         mov(dst, value)
 
-        sub(Register.ESP, 4)
+        sub(ESP, 4)
     }
 }

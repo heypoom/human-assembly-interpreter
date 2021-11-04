@@ -16,10 +16,10 @@ class FlagView(var bits: Int) {
     fun with(flag: Flag, value: Boolean): Int =
         BitView(bits).with(flag.i, value)
 
-    fun get(flag: Flag): Boolean =
+    operator fun get(flag: Flag): Boolean =
         BitView(bits).get(flag.i)
 
-    fun set(flag: Flag, value: Boolean): FlagView {
+    operator fun set(flag: Flag, value: Boolean): FlagView {
         bits = with(flag, value)
         return this
     }

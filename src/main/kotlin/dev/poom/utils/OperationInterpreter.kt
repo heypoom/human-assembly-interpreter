@@ -22,6 +22,37 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
             when (instruction) {
                 PUSH -> m.push(value)
                 JMP -> m.jmp(value)
+
+                JG -> m.jg(value)
+                JGE -> m.jge(value)
+
+                JNG -> m.jle(value)
+                JNGE -> m.jl(value)
+
+                JL -> m.jl(value)
+                JLE -> m.jle(value)
+
+                JNL -> m.jge(value)
+                JNLE -> m.jg(value)
+
+                JE -> m.je(value)
+                JNE -> m.jne(value)
+
+                JZ -> m.je(value)
+                JNZ -> m.jne(value)
+
+                JA -> m.ja(value)
+                JAE -> m.jae(value)
+
+                JB -> m.jb(value)
+                JBE -> m.jbe(value)
+
+                JNA -> m.jbe(value)
+                JNB -> m.jae(value)
+
+                JC -> m.jb(value)
+                JNC -> m.jae(value)
+
                 else -> TODO()
             }
 
@@ -57,25 +88,8 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
             CALL -> TODO()
             LEA -> TODO()
 
-            CMP -> TODO()
+            CMP -> m.cmp(dst, src)
 
-            JG -> TODO()
-            JGE -> TODO()
-
-            JNG -> TODO()
-            JNGE -> TODO()
-
-            JL -> TODO()
-            JLE -> TODO()
-
-            JNL -> TODO()
-            JNLE -> TODO()
-
-            JE -> TODO()
-            JNE -> TODO()
-
-            JZ -> TODO()
-            JNZ -> TODO()
             else -> TODO()
         }
 
