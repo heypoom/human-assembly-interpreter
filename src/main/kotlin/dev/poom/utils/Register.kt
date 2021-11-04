@@ -1,6 +1,9 @@
 package dev.poom.utils
 
 enum class Register {
+    /** Stores the flags. */
+    FLAGS,
+
     /** Accumulator */
     EAX,
 

@@ -28,16 +28,16 @@ enum class Instruction {
     /** Call a procedure by `PUSH eip` */
     CALL,
 
-    /** Logical AND */
+    /** Bitwise Logical AND */
     AND,
 
-    /** Logical OR */
+    /** Bitwise Logical OR */
     OR,
 
-    /** Logical NOT */
+    /** Bitwise Logical NOT */
     NOT,
 
-    /** Logical XOR */
+    /** Bitwise Logical XOR */
     XOR,
 
     /** Shift Left */

@@ -15,7 +15,7 @@ object InstructionParser {
     fun parse(code: String): List<Op> {
         val list: MutableList<Op> = mutableListOf()
 
-        for (line in code.trimIndent().lines()) {
+    for (line in code.trimIndent().lines()) {
             val s = line.replace(",", "").split(" ")
             val (operationText, valuesText) = s.first() to s.drop(1)
 
