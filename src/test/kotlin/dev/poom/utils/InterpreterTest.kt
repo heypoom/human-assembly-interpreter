@@ -10,7 +10,7 @@ internal class InterpreterTest {
         val m = Interpreter()
         m.state.registers[Register.EAX] = 50
 
-        assertEquals(50, m.valueOf(Register.EAX))
+        assertEquals(50, m.value(Register.EAX))
     }
 
     @Test
@@ -18,12 +18,12 @@ internal class InterpreterTest {
         val m = Interpreter()
         m.mov(Register.EAX, 20)
 
-        assertEquals(20, m.valueOf(Register.EAX))
+        assertEquals(20, m.value(Register.EAX))
 
         m.mov(Register.ECX, 50)
         m.mov(Register.EAX, Register.ECX)
 
-        assertEquals(50, m.valueOf(Register.EAX))
+        assertEquals(50, m.value(Register.EAX))
     }
 
     @Test
@@ -32,7 +32,7 @@ internal class InterpreterTest {
         m.mov(Register.EAX, 80)
         m.add(Register.EAX, 50)
 
-        assertEquals(130, m.valueOf(Register.EAX))
+        assertEquals(130, m.value(Register.EAX))
     }
 
     @Test
@@ -41,7 +41,7 @@ internal class InterpreterTest {
         m.mov(Register.ECX, 80)
         m.sub(Register.ECX, 50)
 
-        assertEquals(30, m.valueOf(Register.ECX))
+        assertEquals(30, m.value(Register.ECX))
     }
 
     @Test
@@ -50,7 +50,7 @@ internal class InterpreterTest {
         m.mov(Register.ECX, 10)
         m.inc(Register.ECX)
 
-        assertEquals(11, m.valueOf(Register.ECX))
+        assertEquals(11, m.value(Register.ECX))
     }
 
     @Test
@@ -59,6 +59,6 @@ internal class InterpreterTest {
         m.mov(Register.ECX, 10)
         m.dec(Register.ECX)
 
-        assertEquals(9, m.valueOf(Register.ECX))
+        assertEquals(9, m.value(Register.ECX))
     }
 }

@@ -16,44 +16,56 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
         val src = value(args.getOrNull(1))
 
         when (instruction) {
-            ADD -> m.add(dst, src)
             MOV -> m.mov(dst, src)
+
+            ADD -> m.add(dst, src)
             SUB -> m.sub(dst, src)
+            MUL -> m.mul(dst, src)
+            DIV -> m.div(dst, src)
+
             INC -> m.inc(dst)
             DEC -> m.dec(dst)
 
-            MUL -> TODO()
-            DIV -> TODO()
+            AND -> m.and(dst, src)
+            OR -> m.or(dst, src)
+            XOR -> m.xor(dst, src)
+            NOT -> m.not(dst)
+
+            SHL -> m.shl(dst, src)
+            SHR -> m.shr(dst, src)
+
             INT -> TODO()
             CALL -> TODO()
-            AND -> TODO()
-            OR -> TODO()
-            NOT -> TODO()
-            XOR -> TODO()
-            SHL -> TODO()
-            SHR -> TODO()
+
             CMP -> TODO()
             PUSH -> TODO()
             POP -> TODO()
             LEA -> TODO()
+
             JMP -> TODO()
+
             JG -> TODO()
             JGE -> TODO()
+
             JNG -> TODO()
             JNGE -> TODO()
+
             JL -> TODO()
             JLE -> TODO()
+
             JNL -> TODO()
             JNLE -> TODO()
+
             JE -> TODO()
             JNE -> TODO()
+
             JZ -> TODO()
             JNZ -> TODO()
         }
     }
 
     private fun value(n: Any?): Int {
-        if (n is Register) return m.valueOf(n)
+        if (n is Register) return m.value(n)
         if (n is Int) return n
 
         return 0
