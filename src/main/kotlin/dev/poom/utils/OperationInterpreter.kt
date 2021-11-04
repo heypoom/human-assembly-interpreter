@@ -11,7 +11,15 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
         val (instruction, args) = op
 
         val (dst) = args
-        if (dst !is Register) return
+
+        if (dst !is Register) {
+            when (instruction) {
+                PUSH -> m.push(value(dst))
+                else -> TODO()
+            }
+
+            return
+        }
 
         val src = value(args.getOrNull(1))
 
@@ -34,14 +42,13 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
             SHL -> m.shl(dst, src)
             SHR -> m.shr(dst, src)
 
+            POP -> m.pop(dst)
+
             INT -> TODO()
             CALL -> TODO()
-
-            CMP -> TODO()
-            PUSH -> TODO()
-            POP -> TODO()
             LEA -> TODO()
 
+            CMP -> TODO()
             JMP -> TODO()
 
             JG -> TODO()
@@ -61,6 +68,7 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
 
             JZ -> TODO()
             JNZ -> TODO()
+            else -> TODO()
         }
     }
 

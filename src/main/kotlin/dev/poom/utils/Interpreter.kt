@@ -26,4 +26,19 @@ class Interpreter(val state: MachineState = MachineState()) {
     fun shr(reg: Register, value: Int = 1) = mov(reg, value(reg) shr value)
 
     fun value(register: Register): Int = state.registers[register] ?: 0
+
+    fun push(value: Int) {
+        add(Register.ESP, 4)
+
+        val sp = value(Register.ESP)
+        state.stack[sp] = value
+    }
+
+    fun pop(dst: Register) {
+        val sp = value(Register.ESP)
+        val value = state.stack[sp] ?: 0
+        mov(dst, value)
+
+        sub(Register.ESP, 4)
+    }
 }

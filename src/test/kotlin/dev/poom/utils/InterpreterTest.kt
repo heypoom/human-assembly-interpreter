@@ -121,4 +121,22 @@ internal class InterpreterTest {
 
         assertEquals(-13, m.value(Register.ECX))
     }
+
+    @Test
+    fun stack() {
+        val m = Interpreter()
+        m.push(50)
+        assertEquals(4, m.value(Register.ESP))
+
+        m.push(100)
+        assertEquals(8, m.value(Register.ESP))
+
+        m.pop(Register.EAX)
+        assertEquals(4, m.value(Register.ESP))
+        assertEquals(100, m.value(Register.EAX))
+
+        m.pop(Register.EAX)
+        assertEquals(0, m.value(Register.ESP))
+        assertEquals(50, m.value(Register.EAX))
+    }
 }
