@@ -16,10 +16,10 @@ internal class ConditionalJumpTest {
         """)
 
         // Expect loop to increment EAX five times
-        assertEquals(5, o.m.value(Register.EAX))
+        assertEquals(5, o.m[Register.EAX])
 
         // Expect last line of instruction to be run
-        assertEquals(69, o.m.value(Register.EBX))
+        assertEquals(69, o.m[Register.EBX])
 
         // Expect the zero flag from the last comparison to be set (
         assertEquals(true, o.m.flags[Flag.ZERO])

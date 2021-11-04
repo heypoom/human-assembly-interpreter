@@ -17,6 +17,7 @@ data class MachineState(
 
 class Interpreter(val state: MachineState = MachineState()) {
     fun value(register: Register): Int = state.registers[register] ?: 0
+    operator fun get(register: Register) = value(register)
 
     fun mov(dst: Register, value: Int) = state.registers.set(dst, value)
     fun mov(dst: Register, source: Register) = mov(dst, value(source))

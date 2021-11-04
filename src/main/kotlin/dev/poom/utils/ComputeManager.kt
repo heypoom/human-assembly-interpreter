@@ -19,7 +19,7 @@ class ComputeManager(val code: String) {
     // Value of the Instruction Pointer.
     // Indicates which line of code is being executed.
     // Note that since assembly has jumps, this will not be linear.
-    val ip get() = interpreter.value(Register.EIP)
+    val ip get() = interpreter[Register.EIP]
 
     val currentOp get() = instructions[ip]
 

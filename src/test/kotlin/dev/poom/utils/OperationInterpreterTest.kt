@@ -11,7 +11,7 @@ internal class OperationInterpreterTest {
         oi.run(Op(Instruction.MOV, listOf(Register.EAX, 50)))
         oi.run(Op(Instruction.INC, listOf(Register.EAX)))
 
-        assertEquals(51, oi.m.value(Register.EAX))
+        assertEquals(51, oi.m[Register.EAX])
     }
 
     @Test
@@ -25,6 +25,6 @@ internal class OperationInterpreterTest {
             inc ecx
         """)
 
-        assertEquals(71, oi.m.value(Register.ECX))
+        assertEquals(71, oi.m[Register.ECX])
     }
 }

@@ -1,135 +1,136 @@
 package dev.poom.utils
 
-import org.junit.jupiter.api.Test
+import dev.poom.utils.Register.*
 
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
 internal class InterpreterTest {
     @Test
     fun mov() {
         val m = Interpreter()
-        m.mov(Register.EAX, 20)
+        m.mov(EAX, 20)
 
-        assertEquals(20, m.value(Register.EAX))
+        assertEquals(20, m[EAX])
 
-        m.mov(Register.ECX, 50)
-        m.mov(Register.EAX, Register.ECX)
+        m.mov(ECX, 50)
+        m.mov(EAX, ECX)
 
-        assertEquals(50, m.value(Register.EAX))
+        assertEquals(50, m[EAX])
     }
 
     @Test
     fun add() {
         val m = Interpreter()
-        m.mov(Register.EAX, 80)
-        m.add(Register.EAX, 50)
+        m.mov(EAX, 80)
+        m.add(EAX, 50)
 
-        assertEquals(130, m.value(Register.EAX))
+        assertEquals(130, m[EAX])
     }
 
     @Test
     fun sub() {
         val m = Interpreter()
-        m.mov(Register.ECX, 80)
-        m.sub(Register.ECX, 50)
+        m.mov(ECX, 80)
+        m.sub(ECX, 50)
 
-        assertEquals(30, m.value(Register.ECX))
+        assertEquals(30, m[ECX])
     }
 
     @Test
     fun inc() {
         val m = Interpreter()
-        m.mov(Register.ECX, 10)
-        m.inc(Register.ECX)
+        m.mov(ECX, 10)
+        m.inc(ECX)
 
-        assertEquals(11, m.value(Register.ECX))
+        assertEquals(11, m[ECX])
     }
 
     @Test
     fun dec() {
         val m = Interpreter()
-        m.mov(Register.ECX, 10)
-        m.dec(Register.ECX)
+        m.mov(ECX, 10)
+        m.dec(ECX)
 
-        assertEquals(9, m.value(Register.ECX))
+        assertEquals(9, m[ECX])
     }
 
     @Test
     fun shl() {
         val m = Interpreter()
-        m.mov(Register.EAX, 0b11010100)
+        m.mov(EAX, 0b11010100)
 
-        m.shl(Register.EAX)
-        assertEquals(0b110101000, m.value(Register.EAX))
+        m.shl(EAX)
+        assertEquals(0b110101000, m[EAX])
 
-        m.shl(Register.EAX, 3)
-        assertEquals(0b110101000000, m.value(Register.EAX))
+        m.shl(EAX, 3)
+        assertEquals(0b110101000000, m[EAX])
     }
 
     @Test
     fun shr() {
         val m = Interpreter()
-        m.mov(Register.EAX, 0b11010100)
+        m.mov(EAX, 0b11010100)
 
-        m.shr(Register.EAX)
-        assertEquals(0b01101010, m.value(Register.EAX))
+        m.shr(EAX)
+        assertEquals(0b01101010, m[EAX])
 
-        m.shr(Register.EAX, 3)
-        assertEquals(0b1101, m.value(Register.EAX))
+        m.shr(EAX, 3)
+        assertEquals(0b1101, m[EAX])
     }
 
     @Test
     fun and() {
         val m = Interpreter()
-        m.mov(Register.ECX, 0b00001100)
-        m.and(Register.ECX, 0b00011001)
+        m.mov(ECX, 0b00001100)
+        m.and(ECX, 0b00011001)
 
-        assertEquals(0b00001000, m.value(Register.ECX))
+        assertEquals(0b00001000, m[ECX])
     }
 
     @Test
     fun or() {
         val m = Interpreter()
-        m.mov(Register.ECX, 0b00001100)
-        m.or(Register.ECX,  0b00011001)
+        m.mov(ECX, 0b00001100)
+        m.or(ECX,  0b00011001)
 
-        assertEquals(0b00011101, m.value(Register.ECX))
+        assertEquals(0b00011101, m[ECX])
     }
 
     @Test
     fun xor() {
         val m = Interpreter()
-        m.mov(Register.ECX, 0b00001100)
-        m.xor(Register.ECX, 0b00011001)
+        m.mov(ECX, 0b00001100)
+        m.xor(ECX, 0b00011001)
 
-        assertEquals(0b00010101, m.value(Register.ECX))
+        assertEquals(0b00010101, m[ECX])
     }
 
     @Test
     fun not() {
         val m = Interpreter()
-        m.mov(Register.ECX, 0b00001100)
-        m.not(Register.ECX)
+        m.mov(ECX, 0b00001100)
+        m.not(ECX)
 
-        assertEquals(-13, m.value(Register.ECX))
+        assertEquals(-13, m[ECX])
     }
 
     @Test
     fun stack() {
         val m = Interpreter()
         m.push(50)
-        assertEquals(4, m.value(Register.ESP))
+        assertEquals(4, m[ESP])
 
         m.push(100)
-        assertEquals(8, m.value(Register.ESP))
+        assertEquals(8, m[ESP])
 
-        m.pop(Register.EAX)
-        assertEquals(4, m.value(Register.ESP))
-        assertEquals(100, m.value(Register.EAX))
+        m.pop(EAX)
+        assertEquals(4, m[ESP])
+        assertEquals(100, m[EAX])
 
-        m.pop(Register.EAX)
-        assertEquals(0, m.value(Register.ESP))
-        assertEquals(50, m.value(Register.EAX))
+        m.pop(EAX)
+        assertEquals(0, m[ESP])
+        assertEquals(50, m[EAX])
     }
 
     @Test
