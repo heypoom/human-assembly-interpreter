@@ -6,14 +6,6 @@ import org.junit.jupiter.api.Assertions.*
 
 internal class InterpreterTest {
     @Test
-    fun value() {
-        val m = Interpreter()
-        m.state.registers[Register.EAX] = 50
-
-        assertEquals(50, m.value(Register.EAX))
-    }
-
-    @Test
     fun mov() {
         val m = Interpreter()
         m.mov(Register.EAX, 20)
@@ -138,5 +130,38 @@ internal class InterpreterTest {
         m.pop(Register.EAX)
         assertEquals(0, m.value(Register.ESP))
         assertEquals(50, m.value(Register.EAX))
+    }
+
+    @Test
+    fun `compare equal`() {
+        // 10 == 50
+        val m = Interpreter()
+        m.cmp(10, 10)
+
+        // ZF = 1, CF = 0
+        val v = FlagView(m.value(Register.FLAGS))
+        assertEquals(true to false, v.get(Flag.ZERO) to v.get(Flag.CARRY))
+    }
+
+    @Test
+    fun `compare less than`() {
+        // 10 < 50
+        val m = Interpreter()
+        m.cmp(10, 50)
+
+        // ZF = 0, CF = 1
+        val v = FlagView(m.value(Register.FLAGS))
+        assertEquals(false to true, v.get(Flag.ZERO) to v.get(Flag.CARRY))
+    }
+
+    @Test
+    fun `compare more than`() {
+        // 100 > 20
+        val m = Interpreter()
+        m.cmp(100, 20)
+
+        // ZF = 0, CF = 0
+        val v = FlagView(m.value(Register.FLAGS))
+        assertEquals(false to false, v.get(Flag.ZERO) to v.get(Flag.CARRY))
     }
 }

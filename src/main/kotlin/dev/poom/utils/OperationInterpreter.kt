@@ -3,7 +3,7 @@ package dev.poom.utils
 import dev.poom.utils.Instruction.*
 
 class OperationInterpreter(val m: Interpreter = Interpreter()) {
-    private val ip get() = m.state.registers[Register.EIP] ?: 0
+    private val ip get() = m.value(Register.EIP)
 
     fun run(code: String) = run(InstructionParser.parse(code))
 

@@ -16,6 +16,8 @@ data class MachineState(
 }
 
 class Interpreter(val state: MachineState = MachineState()) {
+    fun value(register: Register): Int = state.registers[register] ?: 0
+
     fun mov(dst: Register, value: Int) = state.registers.set(dst, value)
     fun mov(dst: Register, source: Register) = mov(dst, value(source))
 
@@ -39,26 +41,29 @@ class Interpreter(val state: MachineState = MachineState()) {
 
     fun cmp(reg: Register, value: Int) = cmp(value(reg), value)
 
-    // TODO: Set zero bits
-    fun test(value: Int) {
-        val isZero = value == 0
+    fun cmp(dst: Int, src: Int) {
+        val (zero, carry) = when {
+            dst == src -> true to false
+            dst < src -> false to true
+            else -> false to false
+        }
 
-        mov(Register.FLAGS, 0b01010101)
+        val status = FlagView(value(Register.FLAGS))
+            .set(Flag.ZERO, zero)
+            .set(Flag.CARRY, carry)
+            .bits
+
+        mov(Register.FLAGS, status)
     }
 
-    // TODO: Set carry and zero bits
-    private fun cmp(first: Int, second: Int) {
-        val isGreater = first > second
-        val isEqual = first == second
-
-        mov(Register.FLAGS, 0b11101110)
+    // TODO: Set zero bits
+    fun test(value: Int) {
+        mov(Register.FLAGS, 0b01010101)
     }
 
     fun jne(to: Int) {
 
     }
-
-    fun value(register: Register): Int = state.registers[register] ?: 0
 
     fun push(value: Int) {
         add(Register.ESP, 4)
