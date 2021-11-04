@@ -85,4 +85,40 @@ internal class InterpreterTest {
         m.shr(Register.EAX, 3)
         assertEquals(0b1101, m.value(Register.EAX))
     }
+
+    @Test
+    fun and() {
+        val m = Interpreter()
+        m.mov(Register.ECX, 0b00001100)
+        m.and(Register.ECX, 0b00011001)
+
+        assertEquals(0b00001000, m.value(Register.ECX))
+    }
+
+    @Test
+    fun or() {
+        val m = Interpreter()
+        m.mov(Register.ECX, 0b00001100)
+        m.or(Register.ECX,  0b00011001)
+
+        assertEquals(0b00011101, m.value(Register.ECX))
+    }
+
+    @Test
+    fun xor() {
+        val m = Interpreter()
+        m.mov(Register.ECX, 0b00001100)
+        m.xor(Register.ECX, 0b00011001)
+
+        assertEquals(0b00010101, m.value(Register.ECX))
+    }
+
+    @Test
+    fun not() {
+        val m = Interpreter()
+        m.mov(Register.ECX, 0b00001100)
+        m.not(Register.ECX)
+
+        assertEquals(-13, m.value(Register.ECX))
+    }
 }
