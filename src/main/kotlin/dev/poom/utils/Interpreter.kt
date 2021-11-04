@@ -6,11 +6,8 @@ data class MachineState(
 )
 
 class Interpreter(val state: MachineState = MachineState()) {
-    fun mov(destination: Register, value: Int) {
-        state.registers[destination] = value
-    }
-
-    fun mov(destination: Register, source: Register) = mov(destination, value(source))
+    fun mov(dst: Register, value: Int) = state.registers.set(dst, value)
+    fun mov(dst: Register, source: Register) = mov(dst, value(source))
 
     fun add(reg: Register, value: Int) = mov(reg, value(reg) + value)
     fun sub(reg: Register, value: Int) = add(reg, -value)
@@ -27,8 +24,6 @@ class Interpreter(val state: MachineState = MachineState()) {
 
     fun shl(reg: Register, value: Int) = mov(reg, value(reg) shl value)
     fun shr(reg: Register, value: Int) = mov(reg, value(reg) shr value)
-
-    fun nop() {}
 
     fun value(register: Register): Int = state.registers[register] ?: 0
 }
