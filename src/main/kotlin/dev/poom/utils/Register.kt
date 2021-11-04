@@ -16,6 +16,9 @@ enum class Register {
     /** Base */
     EBX,
 
+    /** Instruction Pointer (Program Counter) */
+    EIP,
+
     /** Stack Pointer */
     ESP,
 

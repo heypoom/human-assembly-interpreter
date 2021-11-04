@@ -15,17 +15,22 @@ object InstructionParser {
     fun parse(code: String): List<Op> {
         val list: MutableList<Op> = mutableListOf()
 
-    for (line in code.trimIndent().lines()) {
-            val s = line.replace(",", "").split(" ")
-            val (instructionText, argsText) = s.first() to s.drop(1)
-
-            val instruction = instructionOf(instructionText) ?: continue
-            val args = argsOf(argsText)
-
-            list.add(Op(instruction, args))
+        for (line in code.trimIndent().lines()) {
+            val op = parseLine(line) ?: continue
+            list.add(op)
         }
 
         return list
+    }
+
+    fun parseLine(code: String): Op? {
+        val s = code.replace(",", "").split(" ")
+        val (instructionText, argsText) = s.first() to s.drop(1)
+
+        val instruction = instructionOf(instructionText) ?: return null
+        val args = argsOf(argsText)
+
+        return Op(instruction, args)
     }
 
 

@@ -1,9 +1,19 @@
 package dev.poom.utils
 
+import java.util.*
+import kotlin.streams.toList
+
 data class MachineState(
     val registers: MutableMap<Register, Int> = mutableMapOf(),
     val stack: MutableMap<Int, Int> = mutableMapOf()
-)
+) {
+    fun value(n: Any?): Int {
+        if (n is Register) return registers[n] ?: 0
+        if (n is Int) return n
+
+        return 0
+    }
+}
 
 class Interpreter(val state: MachineState = MachineState()) {
     fun mov(dst: Register, value: Int) = state.registers.set(dst, value)
@@ -24,6 +34,29 @@ class Interpreter(val state: MachineState = MachineState()) {
 
     fun shl(reg: Register, value: Int = 1) = mov(reg, value(reg) shl value)
     fun shr(reg: Register, value: Int = 1) = mov(reg, value(reg) shr value)
+
+    fun jmp(line: Int) = mov(Register.EIP, line)
+
+    fun cmp(reg: Register, value: Int) = cmp(value(reg), value)
+
+    // TODO: Set zero bits
+    fun test(value: Int) {
+        val isZero = value == 0
+
+        mov(Register.FLAGS, 0b01010101)
+    }
+
+    // TODO: Set carry and zero bits
+    private fun cmp(first: Int, second: Int) {
+        val isGreater = first > second
+        val isEqual = first == second
+
+        mov(Register.FLAGS, 0b11101110)
+    }
+
+    fun jne(to: Int) {
+
+    }
 
     fun value(register: Register): Int = state.registers[register] ?: 0
 

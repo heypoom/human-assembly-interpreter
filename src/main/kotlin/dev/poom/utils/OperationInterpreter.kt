@@ -3,9 +3,13 @@ package dev.poom.utils
 import dev.poom.utils.Instruction.*
 
 class OperationInterpreter(val m: Interpreter = Interpreter()) {
+    private val ip get() = m.state.registers[Register.EIP] ?: 0
+
     fun run(code: String) = run(InstructionParser.parse(code))
 
-    fun run(ops: List<Op>) = ops.forEach { run(it) }
+    fun run(ops: List<Op>) {
+        while (ip < ops.size) run(ops[ip])
+    }
 
     fun run(op: Op) {
         val (instruction, args) = op
@@ -13,10 +17,15 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
         val (dst) = args
 
         if (dst !is Register) {
+            val value = value(dst)
+
             when (instruction) {
-                PUSH -> m.push(value(dst))
+                PUSH -> m.push(value)
+                JMP -> m.jmp(value)
                 else -> TODO()
             }
+
+            m.inc(Register.EIP)
 
             return
         }
@@ -49,7 +58,6 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
             LEA -> TODO()
 
             CMP -> TODO()
-            JMP -> TODO()
 
             JG -> TODO()
             JGE -> TODO()
@@ -70,6 +78,8 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
             JNZ -> TODO()
             else -> TODO()
         }
+
+        m.inc(Register.EIP)
     }
 
     private fun value(n: Any?): Int {
