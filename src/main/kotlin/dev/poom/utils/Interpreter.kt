@@ -17,5 +17,7 @@ class Interpreter(val state: MachineState = MachineState()) {
     fun inc(reg: Register) = add(reg, 1)
     fun dec(reg: Register) = sub(reg, 1)
 
+    fun nop() {}
+
     fun valueOf(register: Register): Int = state.registers[register] ?: 0
 }
