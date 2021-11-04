@@ -58,11 +58,6 @@ class Interpreter(val state: MachineState = MachineState()) {
         mov(FLAGS, status)
     }
 
-    // TODO: Set zero bits
-    fun test(value: Int) {
-        mov(FLAGS, 0b01010101)
-    }
-
     private fun jumpIf(dst: Int, condition: Boolean) {
         if (condition) jmp(dst)
     }
@@ -96,4 +91,11 @@ class Interpreter(val state: MachineState = MachineState()) {
 
         sub(ESP, 4)
     }
+
+    fun call(dst: Int) {
+        push(value(EIP))
+        mov(EIP, dst)
+    }
+
+    fun int(value: Int): Unit = TODO()
 }

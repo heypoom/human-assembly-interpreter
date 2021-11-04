@@ -8,58 +8,85 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
     fun run(code: String) = run(InstructionParser.parse(code))
 
     fun run(ops: List<Op>) {
-        while (ip < ops.size) run(ops[ip])
+        while (ip < ops.size) {
+            println("IP = $ip, ${ops[ip]}")
+
+            run(ops[ip])
+        }
     }
 
     fun run(op: Op) {
+        val prevIP = ip
+
+        // Run instructions with single value, such as push and conditional jumps.
+        runSingleValueOp(op)
+
+        // Run instructions writing to a register, such as move, arithmetic and bitwise operations.
+        runRegisterOp(op)
+
+        // If the instruction pointer is not modified by jumps,
+        // increment the instruction pointer.
+        if (ip == prevIP) m.inc(Register.EIP)
+    }
+
+    private fun runSingleValueOp(op: Op): Boolean {
         val (instruction, args) = op
 
+        // Argument must not be a register.
         val (dst) = args
+        if (dst is Register) return false
 
-        if (dst !is Register) {
-            val value = value(dst)
+        val value = value(dst)
 
-            when (instruction) {
-                PUSH -> m.push(value)
-                JMP -> m.jmp(value)
+        when (instruction) {
+            PUSH -> m.push(value)
+            JMP -> m.jmp(value)
 
-                JG -> m.jg(value)
-                JGE -> m.jge(value)
+            JG -> m.jg(value)
+            JGE -> m.jge(value)
 
-                JNG -> m.jle(value)
-                JNGE -> m.jl(value)
+            JNG -> m.jle(value)
+            JNGE -> m.jl(value)
 
-                JL -> m.jl(value)
-                JLE -> m.jle(value)
+            JL -> m.jl(value)
+            JLE -> m.jle(value)
 
-                JNL -> m.jge(value)
-                JNLE -> m.jg(value)
+            JNL -> m.jge(value)
+            JNLE -> m.jg(value)
 
-                JE -> m.je(value)
-                JNE -> m.jne(value)
+            JE -> m.je(value)
+            JNE -> m.jne(value)
 
-                JZ -> m.je(value)
-                JNZ -> m.jne(value)
+            JZ -> m.je(value)
+            JNZ -> m.jne(value)
 
-                JA -> m.ja(value)
-                JAE -> m.jae(value)
+            JA -> m.ja(value)
+            JAE -> m.jae(value)
 
-                JB -> m.jb(value)
-                JBE -> m.jbe(value)
+            JB -> m.jb(value)
+            JBE -> m.jbe(value)
 
-                JNA -> m.jbe(value)
-                JNB -> m.jae(value)
+            JNA -> m.jbe(value)
+            JNB -> m.jae(value)
 
-                JC -> m.jb(value)
-                JNC -> m.jae(value)
+            JC -> m.jb(value)
+            JNC -> m.jae(value)
 
-                else -> TODO()
-            }
+            CALL -> m.call(value)
+            INT -> m.int(value)
 
-            m.inc(Register.EIP)
-
-            return
+            else -> TODO()
         }
+
+        return true
+    }
+
+    private fun runRegisterOp(op: Op): Boolean {
+        val (instruction, args) = op
+
+        // Argument must be a register.
+        val (dst) = args
+        if (dst !is Register) return false
 
         val src = value(args.getOrNull(1))
 
@@ -84,8 +111,6 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
 
             POP -> m.pop(dst)
 
-            INT -> TODO()
-            CALL -> TODO()
             LEA -> TODO()
 
             CMP -> m.cmp(dst, src)
@@ -93,7 +118,7 @@ class OperationInterpreter(val m: Interpreter = Interpreter()) {
             else -> TODO()
         }
 
-        m.inc(Register.EIP)
+        return true
     }
 
     private fun value(n: Any?): Int {
