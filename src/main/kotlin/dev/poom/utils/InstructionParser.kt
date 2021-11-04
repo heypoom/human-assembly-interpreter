@@ -17,7 +17,7 @@ object InstructionParser {
 
         for (line in code.trimIndent().lines()) {
             val s = line.replace(",", "").split(" ")
-            val (operationText, valuesText) = Pair(s.first(), s.drop(1))
+            val (operationText, valuesText) = s.first() to s.drop(1)
 
             val instruction = instructionOf(operationText) ?: continue
             val values = valuesOf(valuesText)
@@ -28,7 +28,8 @@ object InstructionParser {
         return list
     }
 
-    private fun valuesOf(strings: List<String>) = strings.map { registerOf(it) ?: intoNumeric(it) }
-    private fun instructionOf(name: String) = intoEnum<Instruction>(name)
+
     private fun registerOf(name: String) = intoEnum<Register>(name)
+    private fun instructionOf(name: String) = intoEnum<Instruction>(name)
+    private fun valuesOf(strings: List<String>) = strings.map { registerOf(it) ?: intoNumeric(it) }
 }
